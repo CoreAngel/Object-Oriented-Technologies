@@ -1,0 +1,73 @@
+@startuml
+
+abstract class Node {
+    - name: String
+    - path: Directory
+
+    + Node(name: String, path: Directory)
+    + setName(name: String)
+    + getName(): String
+    + setPath(node: Node)
+    + getPath(): Directory
+}
+
+class File extends Node {
+    - content: byte[]
+
+    + File(name: String, path: Directory)
+    + File(name: String, data: byte[], path: Directory)
+    + getContent(): byte[]
+    + setContent(data: byte[])
+}
+
+class Directory extends Node {
+    - nodesList: List<Node>
+
+    + Directory(name: String, path: Directory)
+    + printList()
+    + add(node: Node)
+    + remove(node: Node)
+    + getByNode(node: Node): Node
+}
+
+Node --o Directory
+
+class RootDirectory extends Directory {
+    + RootDirectory(name: String)
+    + setPath(name: String)
+}
+
+abstract class Verifier {
+    + {static} verifyName(name: String)
+    + {static} verifyPath(path: Directory)
+    + {static} verifyDuplicate(name: String, path: Directory)
+}
+
+Verifier --> Node
+
+class DirectoryDisplayer {
+    + DirectoryDisplayer(verticalSeparator: String, horizontalSeparator: String)
+
+    + display(directory: Directory)
+    - displayRecursive(directory: Directory, offsets: List<TreeOffsetDefine>)
+}
+
+class TreeOffsetDefine {
+    - offset: int
+    - numberChildrenInNode: int
+
+    ~ TreeOffsetDefine(offset: int, numberChildrenInNode: int)
+    ~ getOffset(): int
+    ~ isEmpty(): boolean
+    ~ reduceChildren()
+
+}
+
+TreeOffsetDefine --* DirectoryDisplayer
+
+
+@enduml
+
+root -> folder1, folder2
+folder1 -> folder3
+folder3 -> plik
