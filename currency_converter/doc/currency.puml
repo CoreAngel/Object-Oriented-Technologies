@@ -1,0 +1,81 @@
+@startuml
+
+class Currency {
+    - name: String
+    - code: String
+    - converter: int
+    - rate: BigDecimal
+
+    + Currency()
+    + Currency(name: String, code: String, converter: String, rate: BigDecimal)
+    + getName(): String
+    + getCode(): String
+    + getConverter(): int
+    + getRate(): BigDecimal
+    + setName(name: String)
+    + setCode(code: String)
+    + setConverter(converter: int)
+    + setRate(rate: BigDecimal)
+}
+
+class Calculator {
+    - from: Currency
+    - to: Currency
+    - value: BigDecimal
+
+    + Calculator(from: Currency, to: Currency)
+    + setValue(value: BigDecimal)
+    + calc(): BigDecimal
+}
+
+class CurrencyRepository {
+    - currencies: List<Currency>
+
+    + getList(): List<Currency>
+    + addCurrency(currencyconverter: Currency)
+    + getValueByCode(code: String): Currency
+}
+
+interface IDataProvider {
+    + requireRemoteData(): CurrencyRepository
+}
+
+abstract class NConverter {
+    + {static} remoteRepository(resource: byte[], parser: XmlParser): CurrencyRepository
+}
+
+class NDataProvider implements IDataProvider {
+    + requireRemoteData(): CurrencyRepository
+}
+
+class PrintCurrencyList {
+    + {static} print(repository: CurrencyRepository)
+}
+
+abstract class ResourceLoader {
+    + {static} getResources(url: String): byte[]
+}
+
+abstract class UserCalculator {
+    + {static} calc(from: String, to: String: value: String, provider: IDataProvider): BigDecimal
+}
+
+abstract class UserMenu {
+ + {static} printMenu()
+}
+
+class XmlParser {
+ + parse(data: byte[]): XML
+}
+
+Currency --o Calculator
+ResourceLoader -- NDataProvider
+XmlParser -- NDataProvider
+NConverter -- NDataProvider
+NDataProvider -- CurrencyRepository: Delivers
+Currency --* CurrencyRepository
+UserMenu -- UserCalculator
+UserCalculator -- Calculator
+UserMenu .. PrintCurrencyList
+
+@enduml
