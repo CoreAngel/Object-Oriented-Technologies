@@ -1,0 +1,118 @@
+@startuml
+
+interface IVector {
+    + getX(): double
+    + getY(): double
+    + getAngle(): double[]
+    + getAbs(): double
+    + scalar(vectorcalculator: IVector): double
+    + vectorcalculator(vectorcalculator: IVector): IVector
+    + addition(vectorcalculator: IVector): IVector
+    + subtraction(vectorcalculator: IVector): IVector
+}
+
+class Vector implements IVector {
+    # x: double
+    # y: double
+    # angle: double[]
+    # abs: double
+
+    - Vector()
+    + getX(): double
+    + getY(): double
+    + getAngle(): double[]
+    + getAbs(): double
+
+    + {static} createByPoint(x: double, y: double): Vector
+    + {static} createByAngle(abs: double, angles: double[]): Vector
+}
+
+class Vector3D extends Vector {
+    # z: double
+
+    - Vector3D()
+
+    + {static} createByPoint(x: double, y: double, z: double): Vector3D
+    + {static} createByAngle(abs: double, angles: double[]): Vector3D
+}
+
+'class Vector3Dv2 implements IVector {
+'    - vectorcalculator: Vector
+'
+'    + Vector3Dv2(vectorcalculator: Vector, z: double)
+'    + getZ(): double
+'    + getAbs(): double
+'    + getAngle(): double[]
+'}
+'
+'Vector --o Vector3Dv2
+
+class VectorRepository {
+    - vectors: ArrayList<IVector>
+
+    + add(vectorcalculator: IVector)
+    + remove(vectorcalculator: IVector)
+    + getList(): ArrayList<IVector>
+    + getByVector(vectorcalculator: IVector): IVector
+    + getByIndex(index: int): IVector
+}
+
+IVector --* VectorRepository
+
+abstract class DataLoader {
+    + load(String path): byte[]
+}
+
+interface IDataParser {
+    + parse(data: byte[]): VectorRepository
+}
+
+class DataParser implements IDataParser {
+    + parse(data: byte[]): VectorRepository
+}
+
+abstract class DataProvider {
+    + {static} load(parser: IDataParser): VectorRepository
+    + {static} save(repository: VectorRepository, writer: IDataWriter)
+}
+
+interface IDataWriter {
+    + write(repository: VectorRepository, path: String)
+}
+
+class DataWriter implements IDataWriter {
+    + write(repository: VectorRepository, path: String)
+}
+
+DataProvider -- IDataParser
+DataProvider -- IDataWriter
+DataProvider .. DataLoader
+DataProvider -- VectorRepository
+
+abstract class Menu {
+    + {static} printMenu()
+}
+
+abstract VectorCalculator {
+    + {static} scalar(v1: IVector, v2: IVector): IVector
+    + {static} vectorcalculator(v1: IVector, v2: IVector): IVector
+    + {static} addition(v1: IVector, v2: IVector): IVector
+    + {static} subtraction(v1: IVector, v2: IVector): IVector
+}
+
+abstract class PrintRepository {
+    + {static} print(repository: VectorRepository)
+}
+
+abstract class VectorCreator {
+    + {static} create(): IVector
+}
+
+VectorCalculator .. IVector
+VectorCalculator .. Menu
+PrintRepository .. Menu
+VectorCreator .. Menu
+DataProvider .. Menu
+VectorCreator -- IVector
+
+@enduml
