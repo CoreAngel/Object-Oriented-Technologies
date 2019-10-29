@@ -1,6 +1,7 @@
 package filesystem;
 
 
+import filesystem.console.Context;
 import filesystem.console.commands.CommandsProvider;
 import filesystem.node.directory.Directory;
 import filesystem.node.directory.RootDirectory;

@@ -1,16 +1,16 @@
 package filesystem.console.commands;
 
-import filesystem.console.Console;
+import filesystem.console.Context;
 
 public class AbstractCommand {
 
-    private Console context;
+    private Context context;
 
-    public AbstractCommand(Console context) {
+    public AbstractCommand(Context context) {
         this.context = context;
     }
 
-    public Console getContext() {
+    public Context getContext() {
         return this.context;
     }
 

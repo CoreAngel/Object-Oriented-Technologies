@@ -24,14 +24,6 @@ public class Console {
         this.currentPosition = currentPosition;
     }
 
-    public void stopConsole() {
-        this.running = false;
-    }
-
-    public void addCMD(String name, ICommand cmd) {
-        commands.put(name, cmd);
-    }
-
     public void startConsole() {
         Scanner scanner = new Scanner(System.in);
         this.running = true;
@@ -41,21 +33,32 @@ public class Console {
             String line = scanner.nextLine().trim();
             String[] args = line.split(" ", 2);
             if (args.length == 1) {
-                this.runCommand(args[0], "");
+                this.runCommand(args[0].trim(), "");
             } else {
-                this.runCommand(args[0], args[1]);
+                this.runCommand(args[0].trim(), args[1].trim());
             }
 
         }
     }
 
     private void runCommand(String name, String params) {
-        if(this.commands.containsKey(name)) {
-            this.commands.get(name).run(params);
-        } else {
-            this.printIndicator();
-            System.out.println("Unknown command: " + name);
+        if (!name.isEmpty()) {
+            if (this.commands.containsKey(name)) {
+                this.commands.get(name).run(params);
+            } else {
+                this.printIndicator();
+                System.out.println("Unknown command: " + name);
+            }
         }
+
+    }
+
+    public void stopConsole() {
+        this.running = false;
+    }
+
+    public void addCMD(String name, ICommand cmd) {
+        commands.put(name, cmd);
     }
 
     private void printIndicator() {
