@@ -1,6 +1,6 @@
 package station;
 
-import observer.IObserver;
+import observer.Observable;
 import station.sender.BaseStationSender;
 import unit.IUnit;
 import unit.ResponseCode;
@@ -9,7 +9,7 @@ import unit.state.UnitWorks;
 
 import java.util.ArrayList;
 
-public class BaseStation implements IObserver<IUnit> {
+public class BaseStation implements Observable<IUnit> {
 
     private BaseStationSender sender;
     private ArrayList<IUnit> observers = new ArrayList<>();

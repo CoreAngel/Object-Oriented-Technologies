@@ -1,6 +1,6 @@
 package observer;
 
-public interface IObserver<T> {
+public interface Observable<T> {
     void addObserver(T observer);
     void removeObserver(T observer);
     void notifyObservers();

@@ -1,19 +1,18 @@
 package unit;
 
 
-import firefighter.Firefighter;
-import observer.IObserver;
+import firefighter.IFirefighter;
 import unit.state.UnitState;
 import unit.state.UnitWorks;
 
 import java.util.ArrayList;
 
-public class Unit implements IUnit, IObserver<Firefighter> {
+public class Unit implements IUnit {
 
     private String unitName;
     private String testCode;
     private String alarmCode;
-    private ArrayList<Firefighter> observers = new ArrayList<>();
+    private ArrayList<IFirefighter> observers = new ArrayList<>();
     private UnitState state = new UnitWorks();
 
     public Unit(String unitName, String testCode, String alarmCode) {
@@ -59,29 +58,25 @@ public class Unit implements IUnit, IObserver<Firefighter> {
     }
 
     @Override
-    public void notifyFirefighters() {
-        this.notifyObservers();
-    }
-
-    @Override
-    public void addObserver(Firefighter observer) {
+    public void addObserver(IFirefighter observer) {
         this.observers.add(observer);
     }
 
     @Override
-    public void removeObserver(Firefighter observer) {
+    public void removeObserver(IFirefighter observer) {
         observers.remove(observer);
     }
 
     @Override
     public void notifyObservers() {
-        for (Firefighter firefighter: observers) {
-            firefighter.sendSms();
+        for (IFirefighter firefighter: observers) {
+            this.notifyObserver(firefighter);
         }
     }
 
     @Override
-    public void notifyObserver(Firefighter observer) {
+    public void notifyObserver(IFirefighter observer) {
         observer.sendSms();
     }
+
 }
