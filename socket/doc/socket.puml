@@ -1,0 +1,40 @@
+@startuml
+
+interface IRequest {
+    + handleReq(): void
+}
+
+class JpegReq extends Request {
+    - data: byte[]
+    - type: byte
+    + handle(): Object
+    + encode(o: Object): void
+    + getData(): byte[]
+}
+
+class TextReq extends Request {
+    - data: byte[]
+    - type: byte
+    + handle(): Object
+    + encode(): void
+    + getData(): byte[]
+}
+
+abstract class Request implements IRequest {
+    - type: byte
+    - data: byte[]
+    - next: IRequest
+    + handleReq(): void
+    + {abstract} handle(): Object
+    + {abstract} encode(): void
+    + {abstract} getData(): byte[]
+}
+
+'agregacja
+Request --o JpegReq
+'delegacja
+TextReq --> Request
+'to samo ale mozna inaczej oznaczac
+
+
+@enduml
