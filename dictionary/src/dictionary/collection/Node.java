@@ -11,7 +11,6 @@ class Node {
     private Integer value;
     private boolean isWord = false;
     private Aggregator<Integer, Node> nodes = new Aggregator<>();
-//    private HashMap<Integer, Node> nodes = new HashMap<>();
 
     public Node(Integer value) {
         this.value = value;
