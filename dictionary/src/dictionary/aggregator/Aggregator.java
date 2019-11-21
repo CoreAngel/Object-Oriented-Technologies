@@ -2,6 +2,7 @@ package dictionary.aggregator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Aggregator<K, V> implements Iterable<Pair<K, V>> {
     ArrayList<Pair<K, V>> list = new ArrayList<>();
@@ -13,10 +14,11 @@ public class Aggregator<K, V> implements Iterable<Pair<K, V>> {
     }
 
     public V getValueByKey(K key) {
-        for (Pair<K, V> pair : list) {
-            if (pair.getKey() == key) {
-                return pair.getValue();
-            }
+        Pair<K, V> pair = new Pair<>(key, null);
+        int index = list.indexOf(pair);
+        
+        if (index != -1) {
+            return list.get(index).getValue();
         }
         return null;
     };
@@ -44,9 +46,11 @@ class AggregatorIterator<K, V> implements Iterator<Pair<K, V>> {
     @Override
     public Pair<K, V> next() {
         try {
-           return this.aggregator.list.get(currentIndex);
+            Pair<K, V> pair = this.aggregator.list.get(currentIndex);
+            this.currentIndex++;
+            return pair;
         } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
+            throw new NoSuchElementException();
         }
     }
 }

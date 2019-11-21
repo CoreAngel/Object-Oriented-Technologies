@@ -1,5 +1,8 @@
 package dictionary.collection;
 
+import dictionary.aggregator.Aggregator;
+import dictionary.aggregator.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,7 +10,8 @@ class Node {
 
     private Integer value;
     private boolean isWord = false;
-    private HashMap<Integer, Node> nodes = new HashMap<>();
+    private Aggregator<Integer, Node> nodes = new Aggregator<>();
+//    private HashMap<Integer, Node> nodes = new HashMap<>();
 
     public Node(Integer value) {
         this.value = value;
@@ -21,7 +25,7 @@ class Node {
         if (!value.isEmpty()) {
             Integer firstCharAsInt = (int)value.charAt(0);
             String restOfString = value.substring(1);
-            Node node = nodes.get(firstCharAsInt);
+            Node node = nodes.getValueByKey(firstCharAsInt);
             if (node == null) {
                 Node newNode = new Node(firstCharAsInt);
                 if (restOfString.isEmpty()) {
@@ -29,7 +33,7 @@ class Node {
                 } else {
                     newNode.addWordToNodes(restOfString);
                 }
-                nodes.put(firstCharAsInt, newNode);
+                nodes.add(firstCharAsInt, newNode);
             } else {
                 node.addWordToNodes(restOfString);
             }
@@ -54,8 +58,9 @@ class Node {
             }
 
             if (!this.limitHasReached(limit, findedString)) {
-                for (Node value : nodes.values()) {
-                    value.getValueByString(enteredWord, limit, findedString, newCreatedString);
+                for (Pair<Integer, Node> value : nodes) {
+                    Node node = value.getValue();
+                    node.getValueByString(enteredWord, limit, findedString, newCreatedString);
                     if (this.limitHasReached(limit, findedString)) {
                         break;
                     }
@@ -64,7 +69,7 @@ class Node {
         } else {
             Integer firstCharAsInt = (int)enteredWord.charAt(0);
             String restOfString = enteredWord.substring(1);
-            Node node = nodes.get(firstCharAsInt);
+            Node node = nodes.getValueByKey(firstCharAsInt);
             if (node != null) {
                 node.getValueByString(restOfString, limit, findedString, createdString);
             }

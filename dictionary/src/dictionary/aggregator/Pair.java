@@ -1,5 +1,7 @@
 package dictionary.aggregator;
 
+import java.util.Objects;
+
 public class Pair<K, V> {
     private K key;
     private V value;
@@ -15,5 +17,18 @@ public class Pair<K, V> {
 
     public V getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pair)) return false;
+        Pair<K, V> pair = (Pair<K, V>) o;
+        return getKey().equals(pair.getKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getKey());
     }
 }
