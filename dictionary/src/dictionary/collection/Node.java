@@ -4,7 +4,6 @@ import dictionary.aggregator.Aggregator;
 import dictionary.aggregator.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 class Node {
 
@@ -34,6 +33,9 @@ class Node {
                 }
                 nodes.add(firstCharAsInt, newNode);
             } else {
+                if (restOfString.isEmpty()) {
+                    node.setIsWord(true);
+                }
                 node.addWordToNodes(restOfString);
             }
         }
