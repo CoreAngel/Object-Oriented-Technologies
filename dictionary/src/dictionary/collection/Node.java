@@ -21,7 +21,7 @@ class Node {
 
     void addWordToNodes(String value) {
         if (!value.isEmpty()) {
-            Integer firstCharAsInt = (int)value.charAt(0);
+            Integer firstCharAsInt = value.codePointAt(0);;
             String restOfString = value.substring(1);
             Node node = nodes.getValueByKey(firstCharAsInt);
             if (node == null) {
@@ -68,7 +68,7 @@ class Node {
                 }
             }
         } else {
-            Integer firstCharAsInt = (int)enteredWord.charAt(0);
+            Integer firstCharAsInt = enteredWord.codePointAt(0);
             String restOfString = enteredWord.substring(1);
             Node node = nodes.getValueByKey(firstCharAsInt);
             if (node != null) {
