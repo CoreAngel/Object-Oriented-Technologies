@@ -61,34 +61,4 @@ public class EncodedRequest {
         return this.requestSize;
     }
 
-
-    // @ToDo mozliwe ze te funkcje beda do wywalenia
-//    public byte[] longToBytes(long x) {
-//        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-//        buffer.putLong(x);
-//        return buffer.array();
-//    }
-//
-//
-//    public byte[] intToBytes(int x) {
-//        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-//        buffer.putInt(x);
-//        return buffer.array();
-//    }
-//
-//
-//    public long bytesToLong(byte[] bytes) {
-//        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-//        buffer.put(bytes);
-//        buffer.flip();
-//        return buffer.getLong();
-//    }
-//
-//
-//    public int bytesToInt(byte[] bytes) {
-//        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-//        buffer.put(bytes);
-//        buffer.flip();
-//        return buffer.getInt();
-//    }
 }
