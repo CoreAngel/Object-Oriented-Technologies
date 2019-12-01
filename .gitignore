@@ -71,3 +71,4 @@ fabric.properties
 /target
 
 **/dictionary.txt
+**/data
