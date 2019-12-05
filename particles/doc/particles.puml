@@ -1,0 +1,300 @@
+@startuml
+
+artifact physics {
+
+    class Line {
+        - p1: Point;
+        - p2: Point;
+        - a: double;
+        - b: double;
+        - c: double;
+
+        + Line(p1: Point, p2: Point)
+        + getPointOfIntersection(Line line): Optional<Point>
+        + getA(): double
+        + getB(): double
+        + getC(): double
+    }
+
+    class Point {
+        - x: double;
+        - y: double;
+
+        + Point(x: double, y: double)
+        + moveByVector(vector: Vector): Point
+        + getDistanceWith(point: Point): double
+        + getX(): double
+        + getY(): double
+    }
+
+    class Vector {
+        - point: Point
+
+        + Vector(point: Point)
+        + Vector(length: double, angle: double)
+        + getLength(): double
+        + getAngle(): double
+        + getX(): double
+        + getY(): double
+    }
+
+    class CollisionService {
+        - particlesRepository: ParticleRepository
+        - board: Board
+
+        + CollisionService(particlesRepository: ParticleRepository, board: Board)
+        + calculateCollision(time: double)
+        + moveParticleWithLessMassOutsideMoreMassParticle(p1: Particle, p2: Particle)
+    }
+
+}
+
+artifact provider {
+
+    class Loader {
+        + {static} load(repository: ParticleRepository)
+    }
+
+    class Writer {
+        + {static} save(repository: ParticleRepository)
+    }
+
+}
+
+artifact particle {
+
+    class Particle {
+        - position: Point
+        - radius: double
+        - mass: double
+        - velocity: Vector
+        - path: Line
+        - color: Color
+
+        + Particle(position: Point, radius: double, velocity: Vector, color: Color)
+        + setPosition(position: Point)
+        + getMass(): double
+        + setVelocity(velocity: Vector)
+        + getPosition(): Point
+        + getRadius(): double
+        + getVelocity(): Vector
+        + getPath(): Vector
+        + getColor(): Color
+        + getPositionInTime(time: double): Point
+        + move(time: double)
+        + moveByLength(length: double)
+        + getState(): ParticleState
+        + {static} createFromState(state: ParticleState): Particle
+    }
+
+    class ParticleRepository {
+        - {static} COLORS: List<Color>
+        - particles: List<Particle>
+        - board: Board
+
+        + ParticleRepository(board: Board)
+        + createRandomParticle(): Particle
+        + addParticle(particle: Particle)
+        + createAndAddRandomParticles(number: int)
+        + clearList()
+        + getParticles(): List<Particle>
+        + moveAll(time: double)
+    }
+
+
+
+    class ParticleState {
+        - posX: double;
+        - posY: double;
+        - radius: double;
+        - velX: double;
+        - velY: double;
+        - rgb: int;
+
+        + ParticleState(position: Point, radius: double, velocity: Vector, color: Color)
+        + getPosition(): Point
+        + getRadius(): double
+        + getVelocity(): Vector
+        + getColor(): Color
+    }
+
+}
+
+artifact window {
+
+    class ParticlesCanvas {
+        - repository: ParticleRepository
+        + {static} FPS: int
+
+        + ParticlesCanvas(repository: ParticleRepository, board: Board)
+        + paintComponent(g: Graphics)
+    }
+
+    class Window {
+        - frame: JFrame
+        - canvas: ParticlesCanvas
+        - bar: WindowBar
+
+        + Window(repository: ParticleRepository, board: Board, service: BoardService)
+        + createWindow(title: String)
+    }
+
+    class WindowBar {
+        - service: BoardService
+        - repository: ParticleRepository
+
+        - toogleBtn: JButton
+        - saveBtn: JButton
+        - loadBtn: JButton
+
+        + WindowBar(service: BoardService, repository: ParticleRepository)
+    }
+
+}
+
+artifact board {
+
+    class Board {
+        - width: int;
+        - height: int;
+
+        + Board(width: int, height: int)
+        + getWidth(): int
+        + getHeight(): int
+        + isPointInside(point: Point): boolean
+    }
+
+    class BoardService {
+        - service: CollisionService
+        - repository: ParticleRepository
+        - running: boolean
+        - finished: boolean
+        + {static} FPS: int
+
+        + BoardService(service: CollisionService, repository: ParticleRepository)
+        + run()
+        + isRunning(): boolean
+        + isFinished(): boolean
+        + toogleRunning()
+        + stopRunning()
+        + startRunning()
+        + close()
+    }
+
+    enum BorderCollisionDirection {
+        UP
+        LEFT
+        DOWN
+        RIGHT
+    }
+
+}
+
+Board --> Point
+
+BoardService --o CollisionService
+BoardService --o ParticleRepository
+
+Particle --* Point
+Particle --* Vector
+Particle --* Line
+Particle --> ParticleState
+
+ParticleRepository --o Particle
+ParticleRepository --o Board
+ParticleRepository --> Point
+ParticleRepository --> Vector
+
+ParticleState --> Vector
+ParticleState --> Point
+
+CollisionService --o ParticleRepository
+CollisionService --o Board
+CollisionService --> Point
+CollisionService --> Line
+CollisionService --> Vector
+CollisionService --> Particle
+CollisionService --> BorderCollisionDirection
+
+Line --> Point
+
+Point --> Vector
+
+Vector --* Point
+
+Loader --o ParticleRepository
+Loader --o ParticleState
+Loader --> Particle
+
+Writer --o ParticleRepository
+Writer --> ParticleState
+Writer --> Particle
+
+ParticlesCanvas --o ParticleRepository
+ParticlesCanvas --> Board
+ParticlesCanvas --> Particle
+
+Window --* ParticlesCanvas
+Window --* WindowBar
+Window --> ParticleRepository
+Window --> Board
+Window --> BoardService
+
+WindowBar --o ParticleRepository
+WindowBar --o BoardService
+WindowBar --> Writer
+WindowBar --> Loader
+
+''Originator
+'class Moveable {
+'    - position: Vector2D
+'    - valocity: Vector2D
+'
+'    + move()
+'    + getState(): MoveableState
+'    + loadState(state: MoveableState)
+'}
+'
+'Moveable --o Surface
+'
+'class Surface {
+'    - moveables: List<Moveable>
+'    - width: int
+'    - height: int
+'
+'    + nexIteration()
+'    + addMovable(m: Moveable)
+'}
+
+'memento
+'class MoveableState {
+'    - position: Vector2D
+'    - valocity: Vector2D
+'}
+'
+'class DataLoader {
+'    - filename: String
+'
+'    + load(): List<MoveableState>
+'}
+'
+'class DataSaver {
+'    - filename: String
+'
+'    + save(list: List<MoveableState>)
+'}
+'
+'class CareTaker {
+'}
+
+'Moveable --> MoveableState
+'Surface --> Moveable
+'CareTaker --> Surface
+'CareTaker --> DataLoader
+'CareTaker --> DataSaver
+
+'pamiatka
+'automat skonczony
+'Architektura von Neumanna
+
+@enduml
