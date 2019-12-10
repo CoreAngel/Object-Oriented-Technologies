@@ -16,6 +16,7 @@ public class WindowBar extends JPanel {
     private JButton toogleBtn = new JButton();
     private JButton saveBtn = new JButton("Save state");
     private JButton loadBtn = new JButton("Load state");
+    private JButton addBtn = new JButton("Add");
 
     public WindowBar(BoardService service, ParticleRepository repository) {
         this.service = service;
@@ -25,11 +26,13 @@ public class WindowBar extends JPanel {
         this.add(this.toogleBtn, BorderLayout.LINE_START);
         this.add(this.saveBtn, BorderLayout.LINE_START);
         this.add(this.loadBtn, BorderLayout.LINE_START);
+        this.add(this.addBtn, BorderLayout.LINE_START);
         this.setRunningBtnLabel();
 
         this.setToogleAction();
         this.setSaveAction();
         this.setLoadAction();
+        this.setAddAction();
     }
 
     private void setToogleAction() {
@@ -69,6 +72,10 @@ public class WindowBar extends JPanel {
                 }
             }
         });
+    }
+
+    private void setAddAction() {
+        this.addBtn.addActionListener(e -> this.repository.createAndAddRandomParticles(1));
     }
 
     private boolean stopAndWaitForFinished() {
