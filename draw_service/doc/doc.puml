@@ -1,0 +1,15 @@
+@startuml
+
+'entity component system
+'bridge pattern
+'json
+
+'triangle
+'   pointable
+'circle
+'   point
+'   radius
+'rectangle
+'   pointable
+
+@enduml
