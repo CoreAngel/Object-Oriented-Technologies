@@ -10,6 +10,8 @@ public class RectangleState implements IState {
     private double width;
     private double height;
     private int color;
+    private double perimeter;
+    private double area;
 
     public RectangleState(Rectangle rectangle) {
         this.xLeftDown = rectangle.getLeftDownPoint().getX();
@@ -17,6 +19,8 @@ public class RectangleState implements IState {
         this.width = rectangle.getSize().getWidth();
         this.height = rectangle.getSize().getHeight();
         this.color = rectangle.getColor();
+        this.perimeter = 2 * this.height + 2 * this.width;
+        this.area = this.height * this.width;
     }
 
     public Point getLeftDownPoint() {

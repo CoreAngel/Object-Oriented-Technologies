@@ -8,12 +8,16 @@ public class CircleState implements IState {
     private double y;
     private double radius;
     private int color;
+    private double perimeter;
+    private double area;
 
     public CircleState(Circle circle) {
         this.x = circle.getCenter().getX();
         this.y = circle.getCenter().getY();
         this.radius = circle.getRadius();
         this.color = circle.getColor();
+        this.perimeter = 2 * Math.PI * this.radius;
+        this.area = Math.PI * this.radius * this.radius;
     }
 
     public Point getCenter() {
